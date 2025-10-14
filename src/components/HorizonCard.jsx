@@ -7,7 +7,7 @@ const HorizonCard = () => {
 >
     <h2 className="flex items-center gap-x-3 text-lg md:text-lg font-schibsted text-white mb-4">
         <div class="w-5 h-5 bg-[#CDFE64] rounded-full"></div>
-        11-12th October 2025
+        1st-2nd November 2025
     </h2>
 
     <h2 className="flex items-center gap-x-3 text-2xl sm:text-3xl md:text-5xl font-schibsted font-bold bg-gradient-to-r from-[#81BD01] via-[#F3FFD8] to-[#D9FE8B] bg-clip-text text-transparent text-lime-400 mb-4">
@@ -25,11 +25,11 @@ const HorizonCard = () => {
             </button>
          </a>
 
-         <a href="https://forms.gle/PEX5gmGV9DBhx1UT7">
-            <button className="flex items-center gap-2 bg-[#CDFE64] text-[#1F2E01] hover:bg-blue-500 font-semibold font-outfit text-Body-2-fontSize px-6 py-3 rounded-md">
+         {/* <a href="https://forms.gle/PEX5gmGV9DBhx1UT7"> */}
+            <button className="flex items-center gap-2 bg-[#CDFE64] text-[#1F2E01] font-semibold font-outfit text-Body-2-fontSize px-6 py-3 rounded-md">
                 Register
             </button>
-         </a>
+         {/* </a> */}
     </div>
     
     

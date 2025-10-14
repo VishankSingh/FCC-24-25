@@ -26,6 +26,11 @@ import h_23_4 from '@/assets/images/events/horizon_23/4.png';
 import h_23_5 from '@/assets/images/events/horizon_23/5.png';
 import h_23_6 from '@/assets/images/events/horizon_23/6.png';
 
+import ws_1 from '@/assets/images/events/elevate-1/1.jpg';
+import ws_2 from '@/assets/images/events/elevate-1/2.jpg';
+import ws_3 from '@/assets/images/events/elevate-1/3.jpg';
+import ws_4 from '@/assets/images/events/elevate-1/4.jpg';
+
 import img5 from '@/assets/images/events/EventArchive/img5.jpg';
 
 
@@ -39,6 +44,17 @@ const eventsData = {
         about: 'We lit up the stage with power-packed fireside chats featuring Ankur Warikoo, Dr. A. Velumani, and Pranjal Kamra, alongside a growing league of incredible sponsors. From MBA and finance deep-dives to high-energy games, pronites, and surprise events — this edition had it all. Horizon 2025 wasn’t just bigger, it was unforgettable!!',
         gallery: [warikoo1, warikoo2, velumani1, velumani2, MBAS, MBAS2,breakingBrands, MDD],
         videoUrl: img5,
+      },
+      {
+        id: 'workshop-1',
+        name: 'Elevate Workshop-1',
+        about: 'The FCC Elevate Workshop-1 was held on 11th and 12th October 2025. The Consulting & Product Management Bootcamp and the Inside Finance: Theory, Practice & AI Insights workshops provided practical insights into business strategy, financial decision-making, and the role of technology in modern leadership.',
+        gallery: [ws_1, ws_2, ws_4, ws_3],
+        testimonials: [
+    { id: 1, name: 'Satyapal', rating: 5, text: 'Absolutely fantastic work by all the coordinators and heads. They made the session worth our while.' },
+    { id: 2, name: 'Harshith', rating: 4, text: 'interactive hands on session, fun and active learning, clear communication and fun teaching' },
+    { id: 3, name: 'Aadarsh ', rating: 5, text: 'Day 1 was full of numbers and day 2 was full of fun and brainstorming\t\t' },
+  ]
       },
       // ... rest of events
     ],

@@ -2,8 +2,9 @@ import ArticleCardVertical from "../ArticleCardVertical"
 import ArticleCardLandscape from "../ArticleCardLandscape";
 import img1 from "../../assets/images/home/med_art_1.webp";
 import img2 from "../../assets/images/home/med_art_2.webp";
-import img3 from "../../assets/images/home/med_art_3_desktop.png";
+// import img3 from "../../assets/images/home/med_art_3_desktop.png";
 import img4 from "../../assets/images/home/med_art_3_mobile.png";
+import img3 from "../../assets/images/home/med_art_3.jpg"
 import aditya from "../../assets/team/finance/09.jpg";
 import akaanksh from "../../assets/team/finance/10.jpg";
 
@@ -54,13 +55,13 @@ const article2 = {
   };
 
   const article3 = {
-    link: "https://fcc-iith.medium.com/finance-newsletter-2-8d9fd30ebec3",
+    link: "https://fcc-iith.medium.com/your-fortnightly-finance-fix-government-shutdowns-innovation-and-upgrades-f5e6afdc69d7",
     imageUrl: img3,
-    readTime: '5 min read',
-    tags: ['FInance', 'Markets', 'Aviation'],
-    publishDate: 'Jun 25, 2025',
-    title: 'Finance Newsletter-2',
-    description: 'From aviation shocks to Amazon’s big logistics play, this week highlights both turbulence and resilience in India’s fast-growing economy.',
+    readTime: '4 min read',
+    tags: ['Economy', 'Markets', 'Finance'],
+    publishDate: 'Oct 14, 2025',
+    title: 'Finance Newsletter-4',
+    description: 'How the 2025 U.S. government shutdown is rippling through markets, delaying data, freezing IPOs, and unsettling global investors.',
     people:[{
           id: 1,
           name: "Aditya Narayan",

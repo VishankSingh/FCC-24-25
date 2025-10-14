@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react'; 
 import eventsData from '../assets/data/events/eventsData';
 
 const years = [ 2023, 2024, 2025];
@@ -9,9 +9,48 @@ const PlayIcon = () => (
   </svg>
 );
 
+// Star Icon for the rating
+const StarIcon = ({ filled }) => (
+  <svg className={`w-5 h-5 ${filled ? 'text-yellow-400' : 'text-gray-600'}`} viewBox="0 0 20 20" fill="currentColor">
+    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+  </svg>
+);
+
+//  Star Rating Component
+const StarRating = ({ rating }) => (
+  <div className="flex items-center">
+    {[...Array(5)].map((_, i) => (
+      <StarIcon key={i} filled={i < rating} />
+    ))}
+  </div>
+);
+
+// Testimonial Card Component
+const TestimonialCard = ({ name, rating, text, innerRef }) => (
+  <div 
+    ref={innerRef} 
+    className="relative flex-shrink-0 w-80 min-h-[14rem] bg-[#2a2b33] p-6 rounded-lg shadow-lg flex flex-col h-full"
+  >
+    <div className="absolute top-4 right-4">
+      <StarRating rating={rating} />
+    </div>
+    <div className="flex-grow mt-8">
+      <p className="text-gray-300 italic">"{text}"</p>
+    </div>
+    <div className="mt-4 pt-4 border-t border-gray-700">
+      <p className="text-right font-bold text-white">- {name}</p>
+    </div>
+  </div>
+);
+
 const EventArchive = () =>{
   const [selectedYear, setSelectedYear] = useState(2025);
   const [selectedEventId, setSelectedEventId] = useState(eventsData[2025].events[0].id);
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [itemWidth, setItemWidth] = useState(0);
+  const carouselTrackRef = useRef(null);
+  const itemRef = useRef(null);
 
   const handleYearChange = (year) => {
     setSelectedYear(year);
@@ -24,7 +63,72 @@ const EventArchive = () =>{
   };
 
   const activeEventData = eventsData[selectedYear]?.events.find(e => e.id === selectedEventId);
+  
+  const testimonials = activeEventData?.testimonials || [];
+  const duplicatedTestimonials = testimonials.length > 0 ? [...testimonials, ...testimonials, ...testimonials] : [];
 
+  // Effect to calculate the width of a single item + gap
+  useEffect(() => {
+    const calculateItemWidth = () => {
+      if (itemRef.current && carouselTrackRef.current) {
+        const itemElement = itemRef.current;
+        const trackStyle = window.getComputedStyle(carouselTrackRef.current);
+        const gap = parseFloat(trackStyle.getPropertyValue('column-gap')) || 0;
+        const totalWidth = itemElement.offsetWidth + gap;
+        setItemWidth(totalWidth);
+
+        // Set initial position to the start of the second block for a seamless start
+        if (currentIndex === 0 && testimonials.length > 0) {
+            setCurrentIndex(testimonials.length);
+        }
+      }
+    };
+
+    calculateItemWidth();
+    window.addEventListener('resize', calculateItemWidth);
+    return () => window.removeEventListener('resize', calculateItemWidth);
+  }, [testimonials.length]); // Recalculate if the number of testimonials changes
+
+
+  // Effect for auto-sliding interval
+  useEffect(() => {
+    if (testimonials.length === 0 || itemWidth === 0) return;
+
+    const slideInterval = setInterval(() => {
+      setCurrentIndex(prevIndex => {
+        const nextIndex = prevIndex + 1;
+        if (nextIndex >= testimonials.length * 2) {
+          // Jump back to the start of the second set without transition
+          if (carouselTrackRef.current) {
+            carouselTrackRef.current.style.transition = 'none';
+          }
+          return testimonials.length;
+        }
+        return nextIndex;
+      });
+    }, 3000); // Slide every 3 seconds
+
+    return () => clearInterval(slideInterval);
+  }, [testimonials.length, itemWidth]); // Restart interval if data changes
+
+  // Effect to apply the transform and manage the smooth transition
+  useEffect(() => {
+    if (carouselTrackRef.current && itemWidth > 0) {
+        // After a jump (transition is 'none'), re-enable it smoothly
+        if (carouselTrackRef.current.style.transition === 'none') {
+            setTimeout(() => {
+                if(carouselTrackRef.current) {
+                    carouselTrackRef.current.style.transition = 'transform 0.5s ease-in-out';
+                    carouselTrackRef.current.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+                }
+            }, 50);
+        } else {
+            carouselTrackRef.current.style.transition = 'transform 0.5s ease-in-out';
+            carouselTrackRef.current.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+        }
+    }
+  }, [currentIndex, itemWidth]);
+  
   return (
     <div className="min-h-screen p-4 sm:p-8">
       <div className="max-w-7xl mx-auto">
@@ -130,7 +234,27 @@ const EventArchive = () =>{
                         </a>
                     </div>
                 )}
-
+                  {testimonials.length > 0 && (
+                  <div>
+                    <h3 className="text-2xl font-schibsted font-bold text-[#EBEBEB] mb-4">What Our Attendees Say</h3>
+                    <div className="relative w-full overflow-hidden">
+                      <div
+                        ref={carouselTrackRef}
+                        className="flex gap-x-4" // Use gap for spacing
+                      >
+                        {duplicatedTestimonials.map((testimonial, index) => (
+                          <TestimonialCard
+                            key={`${testimonial.id}-${index}`}
+                            name={testimonial.name}
+                            rating={testimonial.rating}
+                            text={testimonial.text}
+                            innerRef={index === 0 ? itemRef : null} // Attach ref to the first item for measurement
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="flex items-center justify-center h-full">
